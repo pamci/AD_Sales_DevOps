@@ -1,0 +1,1600 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_NEO4J_DATA",
+      "label": "Neo4j_data",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "neo4j",
+      "pluginName": "Neo4j"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "insightscharts",
+      "name": "Insights Charts",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "singlestatneo",
+      "name": "SingleStat-Neo4j",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.0.2"
+    },
+    {
+      "type": "datasource",
+      "id": "neo4j",
+      "name": "Neo4j",
+      "version": "1.0.0"
+    }
+  ],
+  "id": null,
+  "title": "CI Jenkins Dashboard",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "sharedCrosshair": false,
+  "hideControls": false,
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "schemaVersion": 13,
+  "version": 81,
+  "links": [],
+  "gnetId": null,
+  "rows": [
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "content": "",
+          "editable": true,
+          "error": false,
+          "id": 4,
+          "links": [],
+          "mode": "markdown",
+          "span": 12,
+          "title": "Agency Gateway Application",
+          "type": "text"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 27,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 1,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 254,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "APIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_Deploy_PCF_Dev\"] return result as Status,count(distinct n.buildNumber) as APIBuildJobs"
+            }
+          ],
+          "title": "API Dev Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 2,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 254,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "slices": {
+                "0": {
+                  "color": "#38761d"
+                }
+              },
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "APIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\"] return result as Status,count(distinct n.buildNumber) as APIBuildJobs"
+            }
+          ],
+          "title": "API QA Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 3,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 254,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "slices": {
+                "0": {
+                  "color": "#38761d"
+                }
+              },
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "APIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_Deploy_PCF_Stage\"] return result as Status,count(distinct n.buildNumber) as APIBuildJobs"
+            }
+          ],
+          "title": "API Stage Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 19,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 254,
+              "isStacked": true,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "color": "#cc0000"
+                },
+                "1": {
+                  "color": "#38761d"
+                }
+              },
+              "vAxes": [
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "ColumnChart",
+            "insightsChartEditorModel": {
+              "joinInstructions": "return google.visualization.data.join(dataTables[0], dataTables[1], 'full', [[0, 0]], [1], [1]);",
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Failed",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                },
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Success",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "B"
+                }
+              ],
+              "transformInstrctions": "var formatter3 = new google.visualization.DateFormat({ pattern: \"dd-MMM-yy\" });\nvar testFunction = function (val) {\n        return new Date(formatter3.formatValue(val));\n};\nvar result = google.visualization.data.group(data,\n        [{ column: 0, modifier: testFunction, type: 'date' }],\n        [{ 'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number' },\n        { 'column': 2, 'aggregation': google.visualization.data.sum, 'type': 'number' }]);\nreturn result;"
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match (n:CI) where n.result=\"FAILURE\" AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_Stage\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Failed order by  inSightsTimeX"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "match (n:CI) where n.result=\"SUCCESS\" AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_Stage\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Success order by  inSightsTimeX"
+            }
+          ],
+          "title": "API Build Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 286,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 5,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 199,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "UIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_Dev\"] return result as Status,count(distinct n.buildNumber) as UIBuildJobs"
+            }
+          ],
+          "title": "UI Dev Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 6,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 199,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "UIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_QA\",  \"Build_QA_Branch_Merge\"] return result as Status,count(distinct n.buildNumber) as UIBuildJobs"
+            }
+          ],
+          "title": "UI QA Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 7,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 199,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "UIBuildJobs",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result where time>(timestamp()/1000)-1*86400  AND jobName IN [\"Build_Stage\"] return result as Status,count(distinct n.buildNumber) as UIBuildJobs"
+            }
+          ],
+          "title": "UI Stage Build Breakdown for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 20,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 199,
+              "isStacked": true,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "color": "#cc0000"
+                },
+                "1": {
+                  "color": "#38761d"
+                }
+              },
+              "vAxes": [
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "ColumnChart",
+            "insightsChartEditorModel": {
+              "joinInstructions": "return google.visualization.data.join(dataTables[0], dataTables[1], 'full', [[0, 0]], [1], [1]);",
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Failed",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                },
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Success",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "B"
+                }
+              ],
+              "transformInstrctions": "var formatter3 = new google.visualization.DateFormat({ pattern: \"dd-MMM-yy\" });\nvar testFunction = function (val) {\n        return new Date(formatter3.formatValue(val));\n};\nvar result = google.visualization.data.group(data,\n        [{ column: 0, modifier: testFunction, type: 'date' }],\n        [{ 'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number' },\n        { 'column': 2, 'aggregation': google.visualization.data.sum, 'type': 'number' }]);\nreturn result;"
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match (n:CI) where (n.result=\"FAILURE\" OR n.result=\"UNSTABLE\")  AND n.jobName IN [\"Build_Dev\", \"Build_QA\",  \"Build_QA_Branch_Merge\", \"Build_Stage\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Failed order by  inSightsTimeX"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "match (n:CI) where n.result=\"SUCCESS\" AND n.jobName IN [\"Build_Dev\", \"Build_QA\",  \"Build_QA_Branch_Merge\", \"Build_Stage\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Success order by  inSightsTimeX"
+            }
+          ],
+          "title": "UI Build Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 231,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 8,
+          "insightsPanelData": {
+            "chartOptions": {
+              "annotations": {
+                "domain": {
+                  "style": "line"
+                }
+              },
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 263,
+              "legacyScatterChartLabels": true,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Table",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "result",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildNumber",
+                      "type": "string"
+                    },
+                    {
+                      "name": "BuildTime",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildURL",
+                      "type": "string"
+                    },
+                    {
+                      "name": "time",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Description",
+                      "type": "string"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 12,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result   where jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\",\"API_Build_Deploy_PCF_QA\",\"Build_Deploy_PCF_Stage\"] return jobName,result,n.buildNumber as buildNumber,split(n.inSightsTimeX,\"Z\")[0] as BuildTime,collect(distinct n.buildUrl) as buildURL,time,n.shortDescription as Description order by time desc limit 5"
+            }
+          ],
+          "title": "Last 5 API Builds",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 295,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 9,
+          "insightsPanelData": {
+            "chartOptions": {
+              "annotations": {
+                "domain": {
+                  "style": "line"
+                }
+              },
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "legacyScatterChartLabels": true,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Table",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "result",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildNumber",
+                      "type": "string"
+                    },
+                    {
+                      "name": "BuildTime",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildURL",
+                      "type": "string"
+                    },
+                    {
+                      "name": "time",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Description",
+                      "type": "string"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 12,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName,n.result as result   where jobName IN [\"Build_Dev\", \"Build_QA\", \"Build_QA_Branch_Merge\" ,\"Build_Stage\"] return jobName,result,n.buildNumber as buildNumber,n.inSightsTimeX as BuildTime,collect(distinct n.buildUrl) as buildURL,time,n.shortDescription as Description order by time desc limit 5"
+            }
+          ],
+          "title": "Last 5 UI Builds",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 10,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-1*86400 and jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] return jobName,count(distinct n) as buildCount"
+            }
+          ],
+          "title": "Total No.of API Builds for Last 24 Hours",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 11,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-7*86400 and jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] return jobName,count(distinct n) as buildCount"
+            }
+          ],
+          "title": "Total No.of API Builds for last 7 days",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 12,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 12,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-30*86400 and jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] return jobName,count(distinct n) as buildCount"
+            }
+          ],
+          "title": "Total No.of API Builds for last 30 days",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 13,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-1*86400 and jobName IN [\"Build_Dev\", \"Build_QA\", \"Build_QA_Branch_Merge\" ,\"Build_Stage\"] return jobName,count(distinct n) as buildCount order by buildCount desc"
+            }
+          ],
+          "title": "Total No.of UI Builds for last 1 day",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 14,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-7*86400 and jobName IN [\"Build_Dev\", \"Build_QA\", \"Build_QA_Branch_Merge\" ,\"Build_Stage\"] return jobName,count(distinct n) as buildCount order by buildCount desc"
+            }
+          ],
+          "title": "Total No.of UI Builds for last 7 days",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 15,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": null,
+                  "viewWindowMode": null
+                },
+                {
+                  "useFormatFromData": true
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "BarChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "jobName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "buildCount",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 12,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA) with n as n,toInt(n.inSightsTime) as time,n.jobName as jobName where time>(timestamp()/1000)-30*86400 and jobName IN [\"Build_Dev\", \"Build_QA\", \"Build_QA_Branch_Merge\" ,\"Build_Stage\"] return jobName,count(distinct n) as buildCount order by buildCount desc"
+            }
+          ],
+          "title": "Total No.of UI Builds for last 30 days",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 16,
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA {result:\"SUCCESS\"}) with n as n,toInt(n.inSightsTime) as time where time>(timestamp()/1000)-1*86400 and n.jobName IN [\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] return count(distinct n.buildUrl) as BuildCount"
+            }
+          ],
+          "title": "Successful Build Deployments for Last 24 hrs",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "blue",
+              "font-size": "30px"
+            },
+            "selectedfield": "BuildCount"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 17,
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA {result:\"SUCCESS\"}) with n as n,toInt(n.inSightsTime) as time where time>(timestamp()/1000)-7*86400 and n.jobName IN [\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] return count(distinct n.buildUrl) as BuildCount"
+            }
+          ],
+          "title": "Successful Build Deployments for Last 7 days",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "blue",
+              "font-size": "30px"
+            },
+            "selectedfield": "BuildCount"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 18,
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA {result:\"SUCCESS\"}) with n as n,toInt(n.inSightsTime) as time where time>(timestamp()/1000)-30*86400 and n.jobName IN [\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] return count(distinct n.buildUrl) as BuildCount"
+            }
+          ],
+          "title": "Successful Build Deployments for Last 30 days",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "blue",
+              "font-size": "30px"
+            },
+            "selectedfield": "BuildCount"
+          }
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    }
+  ]
+}
