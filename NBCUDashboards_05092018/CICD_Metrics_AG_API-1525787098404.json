@@ -1,0 +1,1922 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_NEO4J_DATA",
+      "label": "Neo4j_data",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "neo4j",
+      "pluginName": "Neo4j"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "multivaluespanel",
+      "name": "MultiValueStat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "insightscharts",
+      "name": "Insights Charts",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.0.2"
+    },
+    {
+      "type": "datasource",
+      "id": "neo4j",
+      "name": "Neo4j",
+      "version": "1.0.0"
+    }
+  ],
+  "id": null,
+  "title": "CICD_Metrics_AG_API",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "sharedCrosshair": false,
+  "hideControls": false,
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "schemaVersion": 13,
+  "version": 33,
+  "links": [],
+  "gnetId": null,
+  "rows": [
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 1,
+          "links": [],
+          "pipelinePanelMetaData": {
+            "pipelinesList": [
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "orange",
+                    "fieldMapName": "Last 24Hrs",
+                    "fieldName": "Last24Hrs",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "A"
+              },
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "yellow",
+                    "fieldMapName": "Last 7Days",
+                    "fieldName": "Last7Days",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "B"
+              },
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "orange",
+                    "fieldMapName": "Last 30Days",
+                    "fieldName": "Last30Days",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "C"
+              }
+            ]
+          },
+          "span": 5,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-1*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"]   return count(distinct n.buildUrl) as Last24Hrs"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-7*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] return count(distinct n.buildUrl) as Last7Days"
+            },
+            {
+              "rawQuery": true,
+              "refId": "C",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-30*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] return count(distinct n.buildUrl) as Last30Days"
+            }
+          ],
+          "title": "No. of API Builds day/week/month",
+          "type": "multivaluespanel"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 3,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#c9daf8"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "slantedText": false,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 240,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "color": "#1c4587",
+                  "pointSize": 7
+                }
+              },
+              "title": "Builds Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#6fa8dc"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "minorGridlines": {
+                    "color": "#fff2cc",
+                    "count": "1"
+                  },
+                  "title": "Count",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Count",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 7,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA)  where n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] and (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)   return split(n.inSightsTimeX,'T')[0] as inSightsTime,count(distinct n.buildUrl) as Count order by inSightsTime"
+            }
+          ],
+          "title": "No. of API Builds Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 272,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 2,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#93c47d"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "textStyle": {
+                  "color": "#38761d",
+                  "fontSize": 12
+                },
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 275,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "color": "#38761d",
+                  "pointSize": 7
+                },
+                "1": {
+                  "pointSize": 7
+                }
+              },
+              "title": "Success vs Failure Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#38761d",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#274e13"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "minorGridlines": {
+                    "color": "#d9ead3",
+                    "count": "1"
+                  },
+                  "title": "Count",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#38761d",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Success",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Failure",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where exists(m.result)   and m.jobName IN [\"CI_API_Pronto\", \"CI_API_PreSpec\", \"CI_API_RSpec\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?) \nwith m,\nCASE WHEN m.result=\"SUCCESS\"\nTHEN 1 ELSE 0 END as success,\nCASE \nWHEN m.result=\"FAILURE\" OR m.result=\"UNSTABLE\" \nTHEN 1 ELSE 0 END as failure\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,sum(success) as Success, sum(failure) as Failure  order by inSightsTime asc"
+            }
+          ],
+          "title": "Code Quality Checks Breakdown Trend",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 19,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 275,
+              "legacyScatterChartLabels": true,
+              "max": 1000,
+              "min": 0,
+              "redFrom": 0,
+              "redTo": 1000,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Failures",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:CI:JENKINS:DATA) where n.jobName in [\"CI_API_Pronto\", \"CI_API_PreSpec\", \"CI_API_RSpec\"] AND (n.result=\"UNSTABLE\" OR n.result=\"FAILURE\" )  AND  tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?  return count(n) as Failures"
+            }
+          ],
+          "title": "Code Quality Failure Count",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 22,
+          "links": [],
+          "pipelinePanelMetaData": {
+            "pipelinesList": [
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "red",
+                    "fieldMapName": "Count",
+                    "fieldName": "StaticCodeErrors",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "A"
+              }
+            ]
+          },
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:JENKINS:DATA) where n.jobName in [\"CI_API_Pronto\", \"CI_API_PreSpec\", \"CI_API_RSpec\"] AND (n.result=\"UNSTABLE\" OR n.result=\"FAILURE\" )  AND  tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?  return count (distinct n.buildUrl) as StaticCodeErrors"
+            }
+          ],
+          "title": "No. of Static Code Errors",
+          "type": "multivaluespanel"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 307,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 5,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 254,
+              "legacyScatterChartLabels": true,
+              "redFrom": 0,
+              "redTo": 1000,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Failed",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where exists(m.result) AND m.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] AND  (m.result=\"FAILURE\" OR m.result=\"UNSTABLE\") AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?) return count(m) as Failed"
+            }
+          ],
+          "title": "Number of API failed builds",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 6,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "greenFrom": 0,
+              "greenTo": 300,
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 254,
+              "legacyScatterChartLabels": true,
+              "max": 1300,
+              "min": 0,
+              "redFrom": 800,
+              "redTo": 1300,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 300,
+              "yellowTo": 800
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "AvgTime",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH(n:CI:JENKINS:DATA) where n.jobName in [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] AND  tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME? return ceil(avg(toInt(n.duration/1000))) as AvgTime"
+            }
+          ],
+          "title": "Time to Package API Build(in secs)",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 8,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#c9daf8"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 254,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "pointSize": 7
+                },
+                "1": {
+                  "color": "#351c75",
+                  "pointSize": 7
+                },
+                "2": {
+                  "pointSize": 7
+                },
+                "3": {
+                  "pointSize": 7
+                }
+              },
+              "title": "Avg Time Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#9fc5e8"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "minorGridlines": {
+                    "color": "#fff2cc",
+                    "count": "1"
+                  },
+                  "title": "Avg Time in Secs",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": "14",
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Stage",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where m.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"Build_Deploy_PCF_Dev\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_Dev,\nCASE \nWHEN m.jobName=\"Build_Deploy_PCF_QA\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_QA,\nCASE \nWHEN m.jobName=\"API_Build_Deploy_PCF_QA\"\nTHEN m.duration ELSE 0 END as API_Build_Deploy_PCF_QA,\nCASE \nWHEN m.jobName=\"Build_Deploy_PCF_Stage\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_Stage\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(Build_Deploy_PCF_Dev/1000))) as Build_Deploy_PCF_Dev,ceil(avg(toInt(Build_Deploy_PCF_QA/1000))) as Build_Deploy_PCF_QA,ceil(avg(toInt(API_Build_Deploy_PCF_QA/1000))) as API_Build_Deploy_PCF_QA,ceil(avg(toInt(Build_Deploy_PCF_Stage/1000))) as Build_Deploy_PCF_Stage order by inSightsTime"
+            }
+          ],
+          "title": "API Build Avg Time Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 286,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 9,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 252,
+              "legacyScatterChartLabels": true,
+              "redFrom": null,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 0,
+              "yellowTo": 100
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "AvgTime",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH(n:CI:JENKINS:DATA) where n.jobName in [\"DB_Build_Dev\", \"DB_Deployment_Dev\", \"DB_Build_QA\", \"DB_Deployment_QA\", \"DB_Build_Stage\", \"DB_Deployment_Stage\"] AND  tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME? return ceil(avg(toInt(n.duration/1000))) as AvgTime"
+            }
+          ],
+          "title": "Time Taken To Build DB Scripts(in secs)",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 10,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#c9daf8"
+              },
+              "booleanRole": "certainty",
+              "curveType": "",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 252,
+              "interpolateNulls": true,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "lineWidth": 2,
+              "series": {
+                "0": {
+                  "color": "#1155cc",
+                  "pointSize": 7
+                },
+                "1": {
+                  "color": "#134f5c",
+                  "pointSize": 7
+                }
+              },
+              "title": "Avg Time Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#6d9eeb"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "title": "Avg Time In Secs",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "LineChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "DB_Build_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DB_Deployment_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DB_Build_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DB_Deployment_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DB_Build_Stage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DB_Deployment_Stage",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where m.jobName IN [\"DB_Build_Dev\", \"DB_Deployment_Dev\", \"DB_Build_QA\", \"DB_Deployment_QA\", \"DB_Build_Stage\", \"DB_Deployment_Stage\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"DB_Build_Dev\"\nTHEN m.duration ELSE 0 END as DB_Build_Dev,\nCASE WHEN m.jobName=\"DB_Deployment_Dev\"\nTHEN m.duration ELSE 0 END as DB_Deployment_Dev,\nCASE WHEN m.jobName=\"DB_Build_QA\"\nTHEN m.duration ELSE 0 END as DB_Build_QA,\nCASE WHEN m.jobName=\"DB_Deployment_QA\"\nTHEN m.duration ELSE 0 END as DB_Deployment_QA,\nCASE WHEN m.jobName=\"DB_Build_Stage\"\nTHEN m.duration ELSE 0 END as DB_Build_Stage,\nCASE WHEN m.jobName=\"DB_Deployment_Stage\"\nTHEN m.duration ELSE 0 END as DB_Deployment_Stage\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(DB_Build_Dev/1000))) as DB_Build_Dev,ceil(avg(toInt(DB_Deployment_Dev/1000))) as DB_Deployment_Dev,ceil(avg(toInt(DB_Build_QA/1000))) as DB_Build_QA,ceil(avg(toInt(DB_Deployment_QA/1000))) as DB_Deployment_QA,ceil(avg(toInt(DB_Build_Stage/1000))) as DB_Build_Stage,ceil(avg(toInt(DB_Deployment_Stage/1000))) as DB_Deployment_Stage"
+            }
+          ],
+          "title": "DB Build Script Avg Time Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 284,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 11,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 245,
+              "legacyScatterChartLabels": true,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 0,
+              "yellowTo": 200
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "AvgTime",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH(n:CI:JENKINS:DATA) where  n.jobName in [\"API_Config_Validation_DEV\", \"API_Config_Validation_QA\", \"API_Config_Validation_STAGE\"]  AND tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME? return ceil(avg(toInt(n.duration/1000))) as AvgTime"
+            }
+          ],
+          "title": "API PreBuild Activities Time(in secs)",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 12,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#cfe2f3"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "slantedText": false,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 245,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "pointSize": 7
+                },
+                "1": {
+                  "color": "#a64d79",
+                  "pointSize": 7
+                },
+                "2": {
+                  "color": "#0c343d",
+                  "pointSize": 7
+                }
+              },
+              "title": "Avg Time Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#6fa8dc"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "title": "Avg Time In Secs",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "API_Config_Validation_DEV",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Config_Validation_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Config_Validation_STAGE",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where m.jobName IN [\"API_Config_Validation_DEV\", \"API_Config_Validation_QA\", \"API_Config_Validation_STAGE\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"API_Config_Validation_DEV\"\nTHEN m.duration ELSE 0 END as API_Config_Validation_DEV,\nCASE \nWHEN m.jobName=\"API_Config_Validation_QA\"\nTHEN m.duration ELSE 0 END as API_Config_Validation_QA,\nCASE \nWHEN m.jobName=\"API_Config_Validation_STAGE\"\nTHEN m.duration ELSE 0 END as API_Config_Validation_STAGE\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(API_Config_Validation_DEV/1000))) as API_Config_Validation_DEV,ceil(avg(toInt(API_Config_Validation_QA/1000))) as API_Config_Validation_QA,ceil(avg(toInt(API_Config_Validation_STAGE/1000))) as API_Config_Validation_STAGE"
+            }
+          ],
+          "title": "API Pre Build Avg Time Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 277,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 13,
+          "links": [],
+          "pipelinePanelMetaData": {
+            "pipelinesList": [
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "orange",
+                    "fieldMapName": "Last 24Hrs",
+                    "fieldName": "Last24Hrs",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "A"
+              },
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "yellow",
+                    "fieldMapName": "Last 7Days",
+                    "fieldName": "Last7Days",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "B"
+              },
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "orange",
+                    "fieldMapName": "Last 30Days",
+                    "fieldName": "Last30Days",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "C"
+              }
+            ]
+          },
+          "span": 7,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-1*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"]   return count(distinct n.buildUrl) as Last24Hrs"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-7*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"]   return count(distinct n.buildUrl) as Last7Days"
+            },
+            {
+              "rawQuery": true,
+              "refId": "C",
+              "target": "match(n:CI:JENKINS:DATA)  where n.inSightsTime>(timestamp()/1000)-30*86400 AND n.jobName IN [\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"]   return count(distinct n.buildUrl) as Last30Days"
+            }
+          ],
+          "title": "Number of Deployment day/week/month",
+          "type": "multivaluespanel"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 14,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 210,
+              "legacyScatterChartLabels": true,
+              "max": 200,
+              "min": 0,
+              "redFrom": 0,
+              "redTo": 200,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Failed",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 5,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where exists(m.result) AND m.jobName IN [\n\"Build_Deploy_PCF_Dev\", \"Build_Deploy_PCF_QA\", \"API_Build_Deploy_PCF_QA\" ,\"Build_Deploy_PCF_Stage\"] AND (m.result=\"FAILURE\" OR m.result=\"UNSTABLE\")  return count(m) as Failed"
+            }
+          ],
+          "title": "No. of Failed Deployments",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 242,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 15,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 242,
+              "legacyScatterChartLabels": true,
+              "legend": "right",
+              "max": 100,
+              "min": 0,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 0,
+              "yellowTo": 100
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "AvgTime",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH(n:CI:JENKINS:DATA) where  n.buildUrl contains \"Agency_Gateway_API\" AND n.jobName in [\"Dest_Branch_Backup\", \"Force_Merge_Dest_Branches\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return ceil(avg(toInt(n.duration/1000))) as AvgTime"
+            }
+          ],
+          "title": "API PreDeployment AvgTime(in secs)",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 16,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#cfe2f3"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "slantedText": false,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 242,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "color": "#1155cc",
+                  "pointSize": 7
+                },
+                "1": {
+                  "color": "#0c343d",
+                  "pointSize": 7
+                }
+              },
+              "title": "AvgTime Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "title": "Avg Time in Secs",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Dest_Branch_Backup",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Force_Merge_Dest_Branches",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where  m.buildUrl contains \"Agency_Gateway_API\" AND m.jobName in [\"Dest_Branch_Backup\", \"Force_Merge_Dest_Branches\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"Dest_Branch_Backup\"\nTHEN m.duration ELSE 0 END as Dest_Branch_Backup,\nCASE \nWHEN m.jobName=\"Force_Merge_Dest_Branches\"\nTHEN m.duration ELSE 0 END as Force_Merge_Dest_Branches\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(Dest_Branch_Backup/1000))) as Dest_Branch_Backup,ceil(avg(toInt(Force_Merge_Dest_Branches/1000))) as Force_Merge_Dest_Branches order by inSightsTime"
+            }
+          ],
+          "title": "API Pre Deployment Avg Time",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 274,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 20,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 206,
+              "legacyScatterChartLabels": true,
+              "max": 100,
+              "min": 0,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 0,
+              "yellowTo": 100
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "AvgTime",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH(n:CI:JENKINS:DATA) where n.jobName in [\"Build_Deploy_PCF_Dev\", \"API_Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_Stage\"] AND  tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME? return ceil(avg(toInt(n.duration/1000))) as AvgTime"
+            }
+          ],
+          "title": "API Deployment Avg Time(in secs)",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 21,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#cfe2f3"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "slantedText": false,
+                "titleTextStyle": {
+                  "color": "#1155cc",
+                  "fontSize": 12,
+                  "italic": true
+                },
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 206,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "pointSize": 7
+                },
+                "1": {
+                  "pointSize": 7
+                },
+                "2": {
+                  "pointSize": 7
+                },
+                "3": {
+                  "pointSize": 7
+                }
+              },
+              "title": "AvgTime Per Day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "gridlines": {
+                    "color": "#6d9eeb"
+                  },
+                  "maxValue": null,
+                  "minValue": null,
+                  "title": "Avg Time In Secs",
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Stage",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where m.jobName IN [\"Build_Deploy_PCF_Dev\", \"API_Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_QA\", \"Build_Deploy_PCF_Stage\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"Build_Deploy_PCF_Dev\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_Dev,\nCASE \nWHEN m.jobName=\"API_Build_Deploy_PCF_QA\"\nTHEN m.duration ELSE 0 END as API_Build_Deploy_PCF_QA,\nCASE \nWHEN m.jobName=\"Build_Deploy_PCF_QA\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_QA,\nCASE \nWHEN m.jobName=\"Build_Deploy_PCF_Stage\"\nTHEN m.duration ELSE 0 END as Build_Deploy_PCF_Stage\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(Build_Deploy_PCF_Dev/1000))) as Build_Deploy_PCF_Dev,ceil(avg(toInt(API_Build_Deploy_PCF_QA/1000))) as API_Build_Deploy_PCF_QA,ceil(avg(toInt(Build_Deploy_PCF_QA/1000))) as Build_Deploy_PCF_QA,ceil(avg(toInt(Build_Deploy_PCF_Stage/1000))) as Build_Deploy_PCF_Stage order by inSightsTime"
+            }
+          ],
+          "title": "API Deployment Build AvgTime",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 238,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 17,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "greenFrom": 75,
+              "greenTo": 100,
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 232,
+              "legacyScatterChartLabels": true,
+              "max": 100,
+              "min": 0,
+              "redFrom": 0,
+              "redTo": 50,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%",
+              "yellowFrom": 50,
+              "yellowTo": 75
+            },
+            "chartType": "Gauge",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "percent",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 4,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:CI:JENKINS:DATA {result:\"SUCCESS\"}) where n.jobName IN [\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] AND (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)  with count(n.result) as success OPTIONAL match(m:CI:JENKINS:DATA) where exists(m.result) AND m.jobName IN [\n\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)  return round(tofloat(success*100)/count(m)) as percent"
+            }
+          ],
+          "title": "API Deployment/Sanity Success rate",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 18,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#cfe2f3"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 232,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "bottom",
+              "series": {
+                "0": {
+                  "pointSize": 7
+                },
+                "1": {
+                  "pointSize": 7
+                },
+                "2": {
+                  "pointSize": 7
+                },
+                "3": {
+                  "pointSize": 7
+                }
+              },
+              "title": "Avg Time Per day",
+              "titleTextStyle": {
+                "bold": true,
+                "color": "#1155cc",
+                "fontSize": "16"
+              },
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "title": "Avg Time In secs",
+                  "titleTextStyle": {
+                    "bold": true,
+                    "color": "#1155cc",
+                    "fontSize": 12,
+                    "italic": true
+                  },
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Post_Deploy_SanityCheck_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Post_Deploy_SanityCheck_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Post_Deploy_SanityCheck_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Post_Deploy_SanityCheck_Stage",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:CI:JENKINS:DATA) where m.jobName IN [\"Post_Deploy_SanityCheck_Dev\", \"API_Post_Deploy_SanityCheck_QA\", \"Post_Deploy_SanityCheck_QA\", \"API_Post_Deploy_SanityCheck_Stage\"] AND (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?)\nwith m,\nCASE WHEN m.jobName=\"Post_Deploy_SanityCheck_Dev\"\nTHEN m.duration ELSE 0 END as Post_Deploy_SanityCheck_Dev,\nCASE \nWHEN m.jobName=\"API_Post_Deploy_SanityCheck_QA\"\nTHEN m.duration ELSE 0 END as API_Post_Deploy_SanityCheck_QA,\nCASE \nWHEN m.jobName=\"Post_Deploy_SanityCheck_QA\"\nTHEN m.duration ELSE 0 END as Post_Deploy_SanityCheck_QA,\nCASE \nWHEN m.jobName=\"API_Post_Deploy_SanityCheck_Stage\"\nTHEN m.duration ELSE 0 END as API_Post_Deploy_SanityCheck_Stage\nreturn split(m.inSightsTimeX,'T')[0] as inSightsTime,ceil(avg(toInt(Post_Deploy_SanityCheck_Dev/1000))) as Post_Deploy_SanityCheck_Dev,ceil(avg(toInt(API_Post_Deploy_SanityCheck_QA/1000))) as API_Post_Deploy_SanityCheck_QA,ceil(avg(toInt(Post_Deploy_SanityCheck_QA/1000))) as Post_Deploy_SanityCheck_QA,ceil(avg(toInt(API_Post_Deploy_SanityCheck_Stage/1000))) as API_Post_Deploy_SanityCheck_Stage order by inSightsTime"
+            }
+          ],
+          "title": "API Post Deployment/Sanity Avg Time",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 264,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    }
+  ]
+}
