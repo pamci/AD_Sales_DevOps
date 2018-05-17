@@ -1,0 +1,659 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_NEO4J_DATA",
+      "label": "Neo4j_data",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "neo4j",
+      "pluginName": "Neo4j"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "singlestatneo",
+      "name": "SingleStat-Neo4j",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "insightscharts",
+      "name": "Insights Charts",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "multivaluespanel",
+      "name": "MultiValueStat",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.0.2"
+    },
+    {
+      "type": "datasource",
+      "id": "neo4j",
+      "name": "Neo4j",
+      "version": "1.0.0"
+    }
+  ],
+  "id": null,
+  "title": "AgencyGateway_ALM",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "sharedCrosshair": false,
+  "hideControls": false,
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_NEO4J_DATA}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "IterationNumber",
+        "multi": true,
+        "name": "IterationNumber",
+        "options": [],
+        "query": "MATCH (n:PivotalTracker:DATA)  where toString(n.ProjectId)=\"1946759\"  RETURN distinct n.Number",
+        "refresh": 1,
+        "regex": "",
+        "sort": 4,
+        "tagValuesQuery": null,
+        "tagsQuery": null,
+        "type": "query"
+      }
+    ]
+  },
+  "annotations": {
+    "list": []
+  },
+  "schemaVersion": 13,
+  "version": 15,
+  "links": [],
+  "gnetId": null,
+  "rows": [
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 6,
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker) with n,split(n.StartTime,'T')[0] as IterationDate call apoc.date.parse(IterationDate,'s','yyyy-MM-dd') yield value as v_1 \nCALL apoc.date.format(timestamp(),\"s\",\"dd-MM-yyyy\") YIELD value as V CALL apoc.date.parse(V,'s',\"dd-MM-yyyy\") YIELD value as Y with n,Y/1000 as currentTime,v_1 as iteration_time where iteration_time < currentTime return n.Number as currentIteration order by iteration_time desc limit 1"
+            }
+          ],
+          "title": "Current Iteration",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "black",
+              "font-size": "30px"
+            },
+            "selectedfield": "currentIteration"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 7,
+          "insightsPanelData": {
+            "chartOptions": {
+              "annotations": {
+                "domain": {
+                  "style": "line"
+                }
+              },
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 203,
+              "legacyScatterChartLabels": true,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Table",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "ProjectId",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ProjectName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Iteration",
+                      "type": "string"
+                    },
+                    {
+                      "name": "StartTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "cycleTime",
+                      "type": "string"
+                    },
+                    {
+                      "name": "RejectionRate",
+                      "type": "string"
+                    },
+                    {
+                      "name": "storyCount",
+                      "type": "number"
+                    },
+                    {
+                      "name": "iteration_time",
+                      "type": "string"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 10,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker) with n,split(n.StartTime,'T')[0] as IterationDate call apoc.date.parse(IterationDate,'s','yyyy-MM-dd') yield value as v_1 \nCALL apoc.date.format(timestamp(),\"s\",\"dd-MM-yyyy\") YIELD value as V CALL apoc.date.parse(V,'s',\"dd-MM-yyyy\") YIELD value as Y with n,Y/1000 as currentTime,v_1 as iteration_time where iteration_time <= currentTime return n.ProjectId as ProjectId,n.ProjectName as ProjectName,n.Number as Iteration,n.StartTime as StartTime,(toInt(n.cycle_time)/1000/60/60) as cycleTime,n.rejection_rate as RejectionRate,count(distinct n.key) as storyCount,iteration_time order by iteration_time desc limit 1"
+            }
+          ],
+          "title": "Iteration details",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 1,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "slantedText": false,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 203,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "top",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "StartTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Velocity",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker) where toString(n.ProjectId)=\"1946759\" and n.Number in $IterationNumber and (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)    return  split(n.StartTime,'T')[0] as StartTime,n.Velocity as Velocity order by StartTime"
+            }
+          ],
+          "title": "Running Velocity Trends in Iteration- $IterationNumber",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 8,
+          "links": [],
+          "pipelinePanelMetaData": {
+            "pipelinesList": [
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "green",
+                    "fieldMapName": "Start Time of Current Iteration",
+                    "fieldName": "StartTime",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "A"
+              },
+              {
+                "fieldsList": [
+                  {
+                    "fieldColor": "",
+                    "fieldMapName": "Start Time of Next Iteration",
+                    "fieldName": "NextStartTime",
+                    "fieldPosition": 1
+                  }
+                ],
+                "pipelineRefId": "B"
+              }
+            ]
+          },
+          "span": 6,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker) with n,split(n.StartTime,'T')[0] as IterationDate call apoc.date.parse(IterationDate,'s','yyyy-MM-dd') yield value as v_1 \nCALL apoc.date.format(timestamp(),\"s\",\"dd-MM-yyyy\") YIELD value as V CALL apoc.date.parse(V,'s',\"dd-MM-yyyy\") YIELD value as Y with n,Y/1000 as currentTime,v_1 as iteration_time where iteration_time < currentTime return n.StartTime as StartTime order by iteration_time desc limit 1"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "MATCH (n:PivotalTracker) with n,split(n.StartTime,'T')[0] as IterationDate call apoc.date.parse(IterationDate,'s','yyyy-MM-dd') yield value as v_1 \nCALL apoc.date.format(timestamp(),\"s\",\"dd-MM-yyyy\") YIELD value as V CALL apoc.date.parse(V,'s',\"dd-MM-yyyy\") YIELD value as Y with n,Y/1000 as currentTime,v_1 as iteration_time where iteration_time > currentTime return n.StartTime as NextStartTime order by iteration_time limit 1"
+            }
+          ],
+          "title": "Iteration duration",
+          "type": "multivaluespanel"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 235,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 3,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 271,
+              "is3D": true,
+              "legacyScatterChartLabels": true,
+              "legend": "labeled",
+              "pieHole": 0,
+              "pieSliceText": "value",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "count",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 7,
+          "targets": [
+            {
+              "hide": false,
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:PivotalTracker:DATA) where toString(n.ProjectId)=\"1946759\" and toString(n.Number) in $IterationNumber and (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return n.Status as Status,count(n.Status) as count"
+            }
+          ],
+          "title": "Story Status in Iteration - $IterationNumber",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 4,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 288,
+              "isStacked": false,
+              "legacyScatterChartLabels": true,
+              "legend": "top",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "AreaChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Iteration",
+                      "type": "string"
+                    },
+                    {
+                      "name": "points",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 5,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker)  where toString(n.ProjectId)=\"1946759\" and n.Number in $IterationNumber and (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)  and n.Status=\"accepted\"  return split(n.StartTime,'T')[0] as StartTime,sum(n.points) as points order by Iteration"
+            }
+          ],
+          "title": "Accepted Points in Iteration- $IterationNumber",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 303,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 5,
+          "insightsPanelData": {
+            "chartOptions": {
+              "annotations": {
+                "domain": {
+                  "style": "line"
+                }
+              },
+              "backgroundColor": "#fbfbfb",
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 222,
+              "legacyScatterChartLabels": true,
+              "page": "enable",
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "Table",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "StoryName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "StoryId",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Point",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Type",
+                      "type": "string"
+                    },
+                    {
+                      "name": "LastUpdated",
+                      "type": "string"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 12,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "MATCH (n:PivotalTracker)  where toString(n.ProjectId)=\"1946759\" and n.Number in $IterationNumber and (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)  and n.Status=\"accepted\"  return distinct n.storyName as StoryName,n.key as StoryId,n.Status as Status,n.points as Point,n.storyType as Type,n.lastUpdated as LastUpdated order by  LastUpdated  desc"
+            }
+          ],
+          "title": "Story Details in Iteration - $IterationNumber",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 254,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    }
+  ]
+}

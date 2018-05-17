@@ -1,0 +1,598 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_NEO4J_DATA",
+      "label": "Neo4j_data",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "neo4j",
+      "pluginName": "Neo4j"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "singlestatneo",
+      "name": "SingleStat-Neo4j",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "insightscharts",
+      "name": "Insights Charts",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.0.2"
+    },
+    {
+      "type": "datasource",
+      "id": "neo4j",
+      "name": "Neo4j",
+      "version": "1.0.0"
+    }
+  ],
+  "id": null,
+  "title": "Builds",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "sharedCrosshair": false,
+  "hideControls": false,
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "refresh": false,
+  "schemaVersion": 13,
+  "version": 18,
+  "links": [],
+  "gnetId": null,
+  "rows": [
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 10,
+          "links": [],
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:SCM:GIT:DATA)  where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return count(n.commitId) as count"
+            }
+          ],
+          "title": "Total Commits",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "black",
+              "font-size": "30px"
+            },
+            "selectedfield": "count"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 13,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "curveType": "",
+              "focusTarget": "category",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 201,
+              "legacyScatterChartLabels": true,
+              "legend": "right",
+              "lineWidth": 2,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "LineChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "MattHowell",
+                      "type": "number"
+                    },
+                    {
+                      "name": "JenkinsAutomationServer",
+                      "type": "number"
+                    },
+                    {
+                      "name": "cakersrailroad",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Matt",
+                      "type": "number"
+                    },
+                    {
+                      "name": "MattieJ",
+                      "type": "number"
+                    },
+                    {
+                      "name": "ChandraPasupuleti",
+                      "type": "number"
+                    },
+                    {
+                      "name": "JamesChilders",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 9,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:GIT:DATA) where (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?) \nwith m,\nCASE WHEN m.authorName=\"Matt Howell\"\nTHEN 1 ELSE 0 END as MattHowell,\nCASE WHEN m.authorName=\"Jenkins Automation Server\"\nTHEN 1 ELSE 0 END as JenkinsAutomationServer,\nCASE WHEN m.authorName=\"cakersrailroad\"\nTHEN 1 ELSE 0 END as cakersrailroad,\nCASE WHEN m.authorName=\"Matt\"\nTHEN 1 ELSE 0 END as Matt,\nCASE WHEN m.authorName=\"Mattie J\"\nTHEN 1 ELSE 0 END as MattieJ,\nCASE WHEN m.authorName=\"Chandra Pasupuleti\"\nTHEN 1 ELSE 0 END as ChandraPasupuleti,\nCASE WHEN m.authorName=\"James Childers\"\nTHEN 1 ELSE 0 END as JamesChilders\nreturn  split(m.inSightsTimeX,'T')[0] as inSightsTime,sum(MattHowell) as MattHowell,sum(JenkinsAutomationServer) as JenkinsAutomationServer,sum(cakersrailroad) as cakersrailroad,sum(Matt) as Matt,sum(MattieJ) as MattieJ,sum(ChandraPasupuleti) as ChandraPasupuleti,sum(JamesChilders) as JamesChilders  order by inSightsTime"
+            }
+          ],
+          "title": "No. of Commits/Developer Trend",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 233,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 11,
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(n:JENKINS:DATA) where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return count(distinct n.buildUrl) as count"
+            }
+          ],
+          "title": "Total Builds",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "black",
+              "font-size": "30px"
+            },
+            "selectedfield": "count"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 12,
+          "links": [],
+          "span": 2,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match (n:JENKINS:DATA) where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) return ceil(avg(toInt(n.duration/1000))) as AvgTimeInSecs"
+            }
+          ],
+          "title": "Average Build Time(secs)",
+          "type": "singlestatneo",
+          "uniqueSingleStatPanelMetaData": {
+            "inputProperties": {
+              "color": "black",
+              "font-size": "30px"
+            },
+            "selectedfield": "AvgTimeInSecs"
+          }
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 14,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "curveType": "",
+              "focusTarget": "category",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 202,
+              "legacyScatterChartLabels": true,
+              "legend": "right",
+              "lineWidth": 2,
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "LineChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTime",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "API_Build_Deploy_PCF_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Deploy_PCF_Stage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Dev",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_QA",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_QA_Branch_Merge",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Build_Stage",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 8,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match(m:JENKINS:DATA) where (tofloat(m.inSightsTime)>=?START_TIME? AND tofloat(m.inSightsTime)<=?END_TIME?) \nwith m,\nCASE WHEN m.jobName=\"Build_Deploy_PCF_Dev\"\nTHEN 1 ELSE 0 END as Build_Deploy_PCF_Dev,\nCASE WHEN m.jobName=\"Build_Deploy_PCF_QA\"\nTHEN 1 ELSE 0 END as Build_Deploy_PCF_QA,\nCASE WHEN m.jobName=\"API_Build_Deploy_PCF_QA\"\nTHEN 1 ELSE 0 END as API_Build_Deploy_PCF_QA,\nCASE WHEN m.jobName=\"Build_Deploy_PCF_Stage\"\nTHEN 1 ELSE 0 END as Build_Deploy_PCF_Stage,\nCASE WHEN m.jobName=\"Build_Dev\"\nTHEN 1 ELSE 0 END as Build_Dev,\nCASE WHEN m.jobName=\"Build_QA\"\nTHEN 1 ELSE 0 END as Build_QA,\nCASE WHEN m.jobName=\"Build_QA_Branch_Merge\"\nTHEN 1 ELSE 0 END as Build_QA_Branch_Merge,\nCASE WHEN m.jobName=\"Build_Stage\"\nTHEN 1 ELSE 0 END as Build_Stage\nreturn  split(m.inSightsTimeX,'T')[0] as inSightsTime,sum(Build_Deploy_PCF_Dev) as Build_Deploy_PCF_Dev,sum(Build_Deploy_PCF_QA) as Build_Deploy_PCF_QA,sum(API_Build_Deploy_PCF_QA) as API_Build_Deploy_PCF_QA,sum(Build_Deploy_PCF_Stage) as Build_Deploy_PCF_Stage,sum(Build_Dev) as Build_Dev,sum(Build_QA) as Build_QA,sum(Build_QA_Branch_Merge) as Build_QA_Branch_Merge,sum(Build_Stage) as Build_Stage  order by inSightsTime"
+            }
+          ],
+          "title": "Build Frequency",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 234,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    },
+    {
+      "title": "Dashboard Row",
+      "panels": [
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 8,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": null,
+                "viewWindowMode": null
+              },
+              "height": 218,
+              "isStacked": true,
+              "legacyScatterChartLabels": true,
+              "legend": "right",
+              "series": {
+                "0": {
+                  "color": "#cc4125"
+                },
+                "1": {
+                  "color": "#6aa84f"
+                }
+              },
+              "vAxes": [
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "logScale": false,
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "ColumnChart",
+            "insightsChartEditorModel": {
+              "joinInstructions": "return google.visualization.data.join(dataTables[0], dataTables[1], 'full', [[0, 0]], [1], [1]);",
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Failed",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                },
+                {
+                  "columnModel": [
+                    {
+                      "name": "inSightsTimeX",
+                      "type": "date"
+                    },
+                    {
+                      "name": "Success",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "B"
+                }
+              ],
+              "transformInstrctions": "var formatter3 = new google.visualization.DateFormat({ pattern: \"dd-MMM-yy\" });\nvar testFunction = function (val) {\n        return new Date(formatter3.formatValue(val));\n};\nvar result = google.visualization.data.group(data,\n        [{ column: 0, modifier: testFunction, type: 'date' }],\n        [{ 'column': 1, 'aggregation': google.visualization.data.sum, 'type': 'number' },\n        { 'column': 2, 'aggregation': google.visualization.data.sum, 'type': 'number' }]);\nreturn result;"
+            }
+          },
+          "links": [],
+          "span": 9,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match (n:JENKINS:DATA) where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?) and  (n.result=\"FAILURE\" OR n.result=\"UNSTABLE\")  return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Failed order by  inSightsTimeX"
+            },
+            {
+              "rawQuery": true,
+              "refId": "B",
+              "target": "match (n:JENKINS:DATA) where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME? ) and n.result=\"SUCCESS\"  return n.inSightsTimeX as inSightsTimeX, count(distinct n.buildUrl) as Success order by  inSightsTimeX"
+            }
+          ],
+          "title": "Build Success vs Failure Trend",
+          "type": "insightscharts"
+        },
+        {
+          "datasource": "${DS_NEO4J_DATA}",
+          "editable": true,
+          "error": false,
+          "id": 9,
+          "insightsPanelData": {
+            "chartOptions": {
+              "backgroundColor": {
+                "fill": "#fbfbfb"
+              },
+              "booleanRole": "certainty",
+              "hAxis": {
+                "maxValue": null,
+                "minValue": null,
+                "useFormatFromData": true,
+                "viewWindow": {
+                  "max": null,
+                  "min": null
+                }
+              },
+              "height": 218,
+              "is3D": false,
+              "legacyScatterChartLabels": true,
+              "pieHole": 0,
+              "slices": {
+                "0": {
+                  "color": "#109618"
+                },
+                "1": {
+                  "color": "#ff9900"
+                },
+                "2": {
+                  "color": "#ff0000"
+                },
+                "3": {
+                  "color": "#dc3912"
+                }
+              },
+              "vAxes": [
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                },
+                {
+                  "maxValue": null,
+                  "minValue": null,
+                  "useFormatFromData": true,
+                  "viewWindow": {
+                    "max": null,
+                    "min": null
+                  }
+                }
+              ],
+              "width": "100%"
+            },
+            "chartType": "PieChart",
+            "insightsChartEditorModel": {
+              "targets": [
+                {
+                  "columnModel": [
+                    {
+                      "name": "Status",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Count",
+                      "type": "number"
+                    }
+                  ],
+                  "id": "A"
+                }
+              ]
+            }
+          },
+          "links": [],
+          "span": 3,
+          "targets": [
+            {
+              "rawQuery": true,
+              "refId": "A",
+              "target": "match (n:JENKINS:DATA)   where (tofloat(n.inSightsTime)>=?START_TIME? AND tofloat(n.inSightsTime)<=?END_TIME?)  return DISTINCT n.result as Status,count(distinct n.buildUrl) as Count"
+            }
+          ],
+          "title": "Build Status",
+          "type": "insightscharts"
+        }
+      ],
+      "showTitle": false,
+      "titleSize": "h6",
+      "height": 250,
+      "repeat": null,
+      "repeatRowId": null,
+      "repeatIteration": null,
+      "collapse": false
+    }
+  ]
+}
